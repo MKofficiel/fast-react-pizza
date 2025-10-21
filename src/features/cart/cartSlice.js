@@ -1,24 +1,10 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { useSelector } from 'react-redux';
 
 const initialState = {
   //   cart: [],
 
-  cart: [
-    {
-      pizzaId: 12,
-      name: 'Mediterranean Pizza',
-      quantity: 1,
-      unitPrice: 15.99,
-      totalPrice: 15.99,
-    },
-    // {
-    //   pizzaId: 8,
-    //   name: 'BBQ Chicken Pizza',
-    //   quantity: 2,
-    //   unitPrice: 17.99,
-    //   totalPrice: 35.98,
-    // },
-  ],
+  cart: [],
 };
 
 const cartSlice = createSlice({
@@ -58,3 +44,29 @@ export const {
 } = cartSlice.actions;
 
 export default cartSlice.reducer;
+
+// const getTotalCartQuantity = (state) =>
+//   state.cart.cart.reduce((sum, item) => sum + item.quantity, 0);
+// const getTotalCartPrice = (state) =>
+//   state.cart.cart.reduce((sum, item) => sum + item.totalPrice, 0);
+
+// export { getTotalCartQuantity, getTotalCartPrice };
+
+// Reselect selectors for memoization
+const selectCart = (state) => state.cart.cart;
+
+const selectTotalCartQuantity = createSelector([selectCart], (cart) =>
+  cart.reduce((sum, item) => sum + item.quantity, 0)
+);
+
+const selectTotalCartPrice = createSelector([selectCart], (cart) =>
+  cart.reduce((sum, item) => sum + item.totalPrice, 0)
+);
+
+
+
+export {
+  selectTotalCartQuantity as getTotalCartQuantity,
+  selectTotalCartPrice as getTotalCartPrice,
+  selectCart as getCart,
+};

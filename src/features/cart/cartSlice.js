@@ -1,6 +1,4 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
-import { act } from 'react';
-import { useSelector } from 'react-redux';
 
 const initialState = {
   //   cart: [],

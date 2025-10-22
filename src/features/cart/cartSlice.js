@@ -1,4 +1,5 @@
 import { createSelector, createSlice } from '@reduxjs/toolkit';
+import { act } from 'react';
 import { useSelector } from 'react-redux';
 
 const initialState = {
@@ -26,8 +27,11 @@ const cartSlice = createSlice({
 
     decreaseItemQuantity: (state, action) => {
       const item = state.cart.find((item) => item.pizzaId === action.payload);
+
       item.quantity--;
       item.totalPrice = item.quantity * item.unitPrice;
+
+      if (item.quantity === 0) cartSlice.caseReducers.removeItem(state, action);
     },
     clearCart: (state) => {
       state.cart = [];
@@ -63,10 +67,12 @@ const selectTotalCartPrice = createSelector([selectCart], (cart) =>
   cart.reduce((sum, item) => sum + item.totalPrice, 0)
 );
 
-
+const pizzaQuantity = (pizzaId) => (state) =>
+  state.cart.cart.find((item) => item.pizzaId === pizzaId)?.quantity || 0;
 
 export {
   selectTotalCartQuantity as getTotalCartQuantity,
   selectTotalCartPrice as getTotalCartPrice,
   selectCart as getCart,
+  pizzaQuantity,
 };
